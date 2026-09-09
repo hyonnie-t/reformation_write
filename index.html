@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>루터 논쟁, 그 이후 — 마무리 글쓰기</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<style>
+  :root{
+    --paper:#EAE3D3;
+    --page:#FBF8EF;
+    --ink:#2B2420;
+    --sub:#6b5f4f;
+    --rule:#d9cfb8;
+    --reform-blue:#3A5A78;
+    --reform-blue-pale:#e7edf1;
+    --church-red:#7A2E2E;
+    --church-red-pale:#f2e6e2;
+    --seal-gold:#B8863B;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:"Pretendard","Noto Sans KR","Malgun Gothic",sans-serif;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 0%, #f6f1e2 0%, var(--paper) 55%, #ddd2b3 100%) fixed;
+    color:var(--ink);
+    font-size:16.5px;
+    line-height:1.7;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .serif{font-family:"Noto Serif KR",serif;}
+
+  .preview-banner{
+    background:#1f1a14; color:#f4ece0; text-align:center;
+    font-size:12.5px; font-weight:700; letter-spacing:.3px;
+    padding:9px; position:sticky; top:0; z-index:20; display:none;
+  }
+
+  .header{
+    background:#241d16;
+    color:#f2e9d5; padding:28px 20px 22px; text-align:center;
+    border-bottom:3px solid var(--seal-gold);
+  }
+  .header .eyebrow{font-size:12px; font-weight:700; letter-spacing:1.6px; color:#d8b96f; opacity:.9;}
+  .header .header-rule{width:34px; height:1px; background:var(--seal-gold); margin:14px auto; opacity:.8;}
+  .header h1{margin:0 0 8px; font-size:21px; font-weight:700; font-family:"Noto Serif KR",serif; line-height:1.45;}
+  .header p{margin:0; font-size:13.5px; font-style:italic; color:#c9baa0; opacity:.9;}
+
+  .wrap{max-width:660px; margin:0 auto; padding:20px 16px 90px;}
+  .screen{display:none;}
+  .screen.active{display:block; animation:fadeUp .35s ease;}
+  @keyframes fadeUp{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+
+  .card{
+    background:var(--page); border:1px solid var(--rule);
+    border-radius:10px; padding:24px 20px; margin-bottom:16px;
+    box-shadow:0 1px 2px rgba(43,36,32,0.05), 0 10px 24px rgba(43,36,32,0.06);
+  }
+  .badge-chip{
+    display:inline-block; color:var(--seal-gold);
+    font-size:12px; font-weight:800; letter-spacing:1.4px;
+    padding:0 0 7px; margin-bottom:14px; border-bottom:1px solid var(--seal-gold);
+  }
+  h2{font-size:19px; margin:0 0 10px; font-weight:700; font-family:"Noto Serif KR",serif; line-height:1.5;}
+  p{margin:0 0 10px;}
+  .sub{color:var(--sub); font-size:14px; line-height:1.65;}
+
+  label{display:block; font-weight:700; color:var(--sub); font-size:13px; margin:14px 0 6px;}
+  input[type=text]{
+    width:100%; padding:14px 15px; font-size:16.5px; font-family:inherit;
+    border:1px solid var(--rule); border-radius:8px; background:var(--page); min-height:48px;
+  }
+  input:focus{outline:none; border-color:var(--reform-blue); box-shadow:0 0 0 3px rgba(58,90,120,0.12);}
+  textarea{
+    width:100%; min-height:130px; padding:14px 15px; font-size:16px;
+    border:1px solid var(--rule); border-radius:8px; background:var(--page);
+    resize:vertical; font-family:inherit; line-height:1.7;
+  }
+  textarea:focus{outline:none; border-color:var(--reform-blue); box-shadow:0 0 0 3px rgba(58,90,120,0.12);}
+  textarea[readonly]{background:#efe9d9; color:#4a4030;}
+
+  .btn{
+    display:block; width:100%; padding:15px 20px; font-size:16px; font-weight:700;
+    border:none; border-radius:8px; cursor:pointer; min-height:50px; margin-top:14px;
+    transition:transform .1s ease; font-family:inherit;
+  }
+  .btn:active{transform:scale(0.98);}
+  .btn-primary{background:var(--reform-blue); color:#f6f3ec; box-shadow:0 3px 10px rgba(58,90,120,0.28);}
+  .btn-primary:disabled{background:#c9c2b3; color:#fff; cursor:not-allowed; box-shadow:none;}
+  .btn-outline{background:transparent; color:var(--reform-blue); border:1.5px solid var(--reform-blue);}
+  .btn-seal{background:var(--seal-gold); color:#241d16; box-shadow:0 3px 10px rgba(184,134,59,0.3); text-align:center; text-decoration:none; display:block;}
+
+  .hint-toggle{
+    display:inline-flex; align-items:center; gap:6px;
+    background:none; border:none; border-bottom:1px dashed var(--reform-blue); color:var(--reform-blue);
+    font-size:13px; font-weight:700; padding:8px 0 6px; cursor:pointer; margin:6px 0 0; font-family:inherit;
+  }
+  .hint-box{
+    display:none; background:var(--reform-blue-pale); border-radius:0 8px 8px 0; border-left:3px solid var(--reform-blue);
+    padding:13px 15px; font-size:13.5px; font-style:italic; color:var(--sub); margin-top:8px; line-height:1.7;
+  }
+  .hint-box.open{display:block;}
+
+  .final-msg{text-align:center;}
+  .final-msg .mark{font-size:30px; margin-bottom:8px;}
+  .copy-status{text-align:center; font-size:13px; color:var(--sub); min-height:18px; margin-top:6px;}
+
+  @media (min-width:760px){ body{font-size:17px;} }
+</style>
+</head>
+<body>
+
+<div class="preview-banner" id="previewBanner">🔍 미리보기 모드 — 제출해도 기록에 안 남아요</div>
+
+<div class="header">
+  <div class="eyebrow">2학년 세계사 · 종교 개혁과 신교의 등장</div>
+  <div class="header-rule"></div>
+  <h1 class="serif">루터 논쟁, 그 이후</h1>
+  <p>강의로 배운 내용을 더해서, 이제 네 생각을 정리해보자</p>
+</div>
+
+<div class="wrap">
+
+  <!-- 화면 0: 로그인 확인 -->
+  <div class="screen active" id="screen-start">
+    <div class="card">
+      <span class="badge-chip">시작하기</span>
+      <h2>먼저 정보를 확인해줘</h2>
+      <p class="sub">포털(또는 이전 웹앱)에서 넘어온 정보가 맞는지 확인하고 시작해줘.</p>
+      <label>학번</label>
+      <input type="text" id="studentId" inputmode="numeric" maxlength="5" placeholder="예: 20305">
+      <label>이름</label>
+      <input type="text" id="studentName" placeholder="이름을 입력하세요">
+      <button class="btn btn-primary" id="startBtn" disabled>시작하기</button>
+    </div>
+  </div>
+
+  <!-- 화면 1: 안내 -->
+  <div class="screen" id="screen-intro">
+    <div class="card">
+      <span class="badge-chip">화면 1 · 안내</span>
+      <h2>이제 루터 역할에서 나와서, 너의 생각을 써봐</h2>
+      <p class="sub">
+        조금 전엔 루터가 되어 교회 측(AI)과 논쟁했어. 그리고 방금 강의에서
+        이 논쟁이 실제로 어떻게 흘러갔는지(아우크스부르크 화의 등) 들었을 거야.
+        이제는 역할을 벗고, 관찰자로서 두 입장을 비교하고 판단해보자.
+      </p>
+      <button class="btn btn-primary" id="toWriteBtn">글쓰기 시작하기</button>
+    </div>
+  </div>
+
+  <!-- 화면 2: 글쓰기 -->
+  <div class="screen" id="screen-write">
+    <div class="card">
+      <span class="badge-chip">화면 2 · 마무리 글쓰기</span>
+      <h2>1. 교회 측 논리와 루터의 논리, 너는 어느 쪽이 더 설득력 있다고 생각해?</h2>
+      <p class="sub">대화 내용 + 오늘 배운 내용을 근거로 써줘.</p>
+      <textarea id="q1Txt" placeholder="예: 나는 ___ 쪽이 더 설득력 있다고 생각해. 왜냐하면 ___"></textarea>
+
+      <button type="button" class="hint-toggle" id="hintToggle">💡 막막하면 힌트 보기</button>
+      <div class="hint-box" id="hintBox">
+        대화할 때 상대(교회 측)가 했던 말 중에, 지금 다시 보니 이해가 가는 부분이 있어?
+        아니면 여전히 납득 안 되는 부분이 있어?
+      </div>
+
+      <h2 style="margin-top:26px;">2. 이 논쟁은 왜 하나로 다시 합쳐지지 못하고, 갈라선 채 끝났을까?</h2>
+      <textarea id="q2Txt" placeholder="강의에서 들은 내용을 떠올려 써봐"></textarea>
+
+      <button class="btn btn-primary" id="submitBtn" disabled>제출하기</button>
+    </div>
+  </div>
+
+  <!-- 화면 3: 제출 완료 -->
+  <div class="screen" id="screen-done">
+    <div class="card final-msg">
+      <div class="mark">✅</div>
+      <div style="font-weight:800; font-size:16px;">제출 완료</div>
+      <div class="sub" style="margin-top:6px;">오늘 활동 여기까지! 선생님이 네 글을 확인할게.</div>
+    </div>
+
+    <div class="card" id="padletCard" style="display:none;">
+      <span class="badge-chip">패들렛에 옮겨 쓰기</span>
+      <h2>이 내용을 복사해서 패들렛에 붙여넣어줘</h2>
+      <textarea id="padletText" readonly style="min-height:180px;"></textarea>
+      <button class="btn btn-outline" id="copyPadletBtn">📋 패들렛에 복사하기</button>
+      <a class="btn btn-seal" id="openPadletBtn" href="#" target="_blank" rel="noopener" style="display:none;">🔗 패들렛으로 이동</a>
+      <p class="copy-status" id="padletStatus"></p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ════════════════════════════════════════════════════════
+ * CONFIG
+ * ════════════════════════════════════════════════════════ */
+const CONFIG = {
+  SHEET_WEBAPP_URL: "https://script.google.com/macros/s/AKfycbyXSjCfWY_HiZFqW_OBR-FQDoIfF1z_STqyKWUI31MacHeY3u7hbirFSFDvW-5yuUHaJQ/exec",
+  // TODO(효니): 커리큘럼 시트에 이 문자열 그대로 activity id로 등록할 것.
+  // 웹앱1(AI 대화)과 같은 차시 행에 "활동 2개·순차진행"으로 등록할 것 — 웹앱1을
+  // 끝내야 이 활동이 잠금 해제되는 게 history26 포털 쪽에서 자동 적용된다.
+  GAME_NAME: "종교개혁_루터논쟁_마무리글쓰기",
+  // 2학년 세계사(역사A) 패들렛 — crusades(십자군) 웹앱과 같은 반별 링크를 그대로 재사용.
+  // 4반은 이 수업(역사A)에 안 들어가서 미배정 — 링크 없는 반은 아래에서 버튼이 자동으로 숨겨짐.
+  PADLET_URL_BY_BAN: {
+    1: "https://padlet.com/dy_sch03/2026-2-2-1-k1jop39mhghmd56k",
+    2: "https://padlet.com/dy_sch03/2026-2-2-2-os1gszeikni6v49",
+    3: "https://padlet.com/dy_sch03/2026-2-2-3-lsh3dbhtdzk7quvx"
+  }
+};
+
+/* 학번(학년1+반2+번호2, 5자리)에서 반 번호만 뽑아낸다. history26 포털 parseStudentId()와 동일 규칙. */
+function parseBan_(sid){
+  const digits = String(sid || "").trim();
+  if (!/^\d{5}$/.test(digits)) return null;
+  return parseInt(digits.slice(1, 3), 10);
+}
+
+/* ── 화면 전환 ── */
+function showScreen(id){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+
+/* ── 화면 0: 입력 검증 ── */
+const studentIdEl = document.getElementById("studentId");
+const studentNameEl = document.getElementById("studentName");
+const startBtn = document.getElementById("startBtn");
+
+function checkStart(){
+  startBtn.disabled = !(studentIdEl.value.trim() && studentNameEl.value.trim());
+}
+[studentIdEl, studentNameEl].forEach(el=>el.addEventListener("input", checkStart));
+startBtn.addEventListener("click", ()=> showScreen("screen-intro"));
+
+/* ── 화면 1 → 2 ── */
+document.getElementById("toWriteBtn").addEventListener("click", ()=> showScreen("screen-write"));
+
+/* ── 힌트 토글 ── */
+document.getElementById("hintToggle").addEventListener("click", ()=>{
+  document.getElementById("hintBox").classList.toggle("open");
+});
+
+/* ── 화면 2: 글쓰기 검증 ── */
+const q1Txt = document.getElementById("q1Txt");
+const q2Txt = document.getElementById("q2Txt");
+const submitBtn = document.getElementById("submitBtn");
+
+function checkWrite(){
+  submitBtn.disabled = !(q1Txt.value.trim().length >= 10 && q2Txt.value.trim().length >= 10);
+}
+[q1Txt, q2Txt].forEach(el=>el.addEventListener("input", checkWrite));
+
+/* ── 제출 재시도 헬퍼 — history26 포털 fetchJsonRetry_() 관례(3회·700ms 간격)와 동일.
+ * 순간적인 네트워크 문제로 fetch가 한 번 실패해도 시트 기록이 안 남는 사고를 막기 위함
+ * (효니 피드백, 2026-09-09 — webapp-builder 스킬에 필수 항목으로 명시됨). ── */
+function postWithRetry_(url, payload, triesLeft){
+  triesLeft = (triesLeft == null) ? 3 : triesLeft;
+  return fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify(payload)
+  })
+  .then(res => res.json())
+  .catch(err => {
+    if (triesLeft > 1) {
+      return new Promise(resolve => setTimeout(resolve, 700))
+        .then(() => postWithRetry_(url, payload, triesLeft - 1));
+    }
+    throw err;
+  });
+}
+
+let PREVIEW = false;
+let submitting = false;
+
+submitBtn.addEventListener("click", async ()=>{
+  if (submitting) return;
+  submitting = true;
+  submitBtn.disabled = true;
+  submitBtn.textContent = "제출 중...";
+
+  const studentId = studentIdEl.value.trim();
+  const studentName = studentNameEl.value.trim();
+  const q1 = q1Txt.value.trim();
+  const q2 = q2Txt.value.trim();
+
+  const reflection =
+    `[교회 측 논리와 루터의 논리, 어느 쪽이 더 설득력 있는가]\n${q1}\n\n` +
+    `[왜 하나로 다시 합쳐지지 못했는가]\n${q2}`;
+
+  const payload = {
+    studentId: studentId,
+    studentName: studentName,
+    gameName: CONFIG.GAME_NAME,
+    choiceSummary: "",
+    diffSummary: "",
+    reflection: reflection,
+    choicesJson: JSON.stringify({ q1: q1, q2: q2 })
+  };
+
+  if (!PREVIEW) {
+    try{ localStorage.setItem("reform2_pending_submit", JSON.stringify(payload)); }catch(e){}
+
+    try{
+      const json = await postWithRetry_(CONFIG.SHEET_WEBAPP_URL, payload);
+      if (!json || json.result !== "success") throw new Error((json && json.message) || "백엔드가 저장 실패를 반환함");
+      try{ localStorage.removeItem("reform2_pending_submit"); }catch(e){}
+    }catch(err){
+      console.log("전송 실패(콘솔 확인용):", err);
+      submitting = false;
+      submitBtn.disabled = false;
+      submitBtn.textContent = "다시 제출하기";
+      alert("여러 번 시도했는데 계속 실패했어. 인터넷 연결을 확인하고 다시 눌러줘! (누르지 않아도 이 화면엔 네가 쓴 글이 남아있어)");
+      return;
+    }
+  } else {
+    console.log("[미리보기] 실제 전송 안 함:", payload);
+  }
+
+  const padletText =
+    `[1. 교회 측 논리와 루터의 논리, 어느 쪽이 더 설득력 있는가]\n${q1}\n\n` +
+    `[2. 이 논쟁은 왜 하나로 다시 합쳐지지 못했는가]\n${q2}`;
+  document.getElementById("padletText").value = padletText;
+  document.getElementById("padletStatus").textContent = "";
+
+  const padletUrl = CONFIG.PADLET_URL_BY_BAN[parseBan_(studentId)];
+  const padletCard = document.getElementById("padletCard");
+  const openPadletBtn = document.getElementById("openPadletBtn");
+  if (padletUrl) {
+    padletCard.style.display = "block";
+    openPadletBtn.href = padletUrl;
+    openPadletBtn.style.display = "block";
+  } else {
+    padletCard.style.display = "none";
+  }
+
+  submitting = false;
+  showScreen("screen-done");
+});
+
+/* ── 패들렛용 복사하기 ── */
+document.getElementById("copyPadletBtn").addEventListener("click", async ()=>{
+  const box = document.getElementById("padletText");
+  const statusEl = document.getElementById("padletStatus");
+  try{
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      await navigator.clipboard.writeText(box.value);
+    } else {
+      box.removeAttribute("readonly");
+      box.focus();
+      box.select();
+      document.execCommand("copy");
+      box.setAttribute("readonly", "true");
+    }
+    statusEl.textContent = "✅ 복사됐어! 패들렛에 붙여넣기 해봐.";
+  }catch(err){
+    statusEl.textContent = "복사가 안 됐어. 위 글을 직접 길게 눌러서 선택 후 복사해줘.";
+    box.removeAttribute("readonly");
+    box.focus();
+    box.select();
+  }
+});
+
+/* ── URL 파라미터 자동 채움 / 미리보기 모드 ──
+ * 주의: 위쪽 const(studentIdEl 등)를 참조하므로, 반드시 그 선언과 이벤트 바인딩이
+ * 모두 끝난 뒤(스크립트 맨 아래)에 호출해야 함. TDZ 에러로 전체가 멈추는 걸 방지. */
+function init(){
+  const params = new URLSearchParams(location.search);
+  const sid = params.get("sid") || "";
+  const name = params.get("name") || "";
+  if (sid) studentIdEl.value = sid;
+  if (name) studentNameEl.value = name;
+  checkStart();
+
+  if (params.get("preview") === "1") {
+    PREVIEW = true;
+    document.getElementById("previewBanner").style.display = "block";
+    if (!sid) studentIdEl.value = "20301";
+    if (!name) studentNameEl.value = "교사미리보기";
+    checkStart();
+  }
+}
+
+/* ── 진입점: 모든 선언·바인딩이 끝난 뒤 마지막에 실행 ── */
+init();
+</script>
+
+</body>
+</html>
