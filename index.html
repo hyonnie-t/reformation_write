@@ -105,6 +105,19 @@
   }
   .hint-box.open{display:block;}
 
+  .step-divider{border:none; border-top:1px dashed var(--rule); margin:22px 0 20px;}
+
+  .option-list{display:flex; flex-direction:column; gap:10px; margin:10px 0 4px;}
+  .option-card{
+    display:flex; align-items:flex-start; gap:12px;
+    border:1.5px solid var(--rule); border-radius:8px; background:var(--page);
+    padding:14px 15px; cursor:pointer; min-height:44px;
+    transition:border-color .15s ease, background .15s ease;
+  }
+  .option-card input[type=radio]{margin-top:3px; width:18px; height:18px; accent-color:var(--reform-blue); flex-shrink:0;}
+  .option-card span{font-size:15.5px; line-height:1.55;}
+  .option-card.selected{border-color:var(--reform-blue); background:var(--reform-blue-pale);}
+
   .final-msg{text-align:center;}
   .final-msg .mark{font-size:30px; margin-bottom:8px;}
   .copy-status{text-align:center; font-size:13px; color:var(--sub); min-height:18px; margin-top:6px;}
@@ -157,9 +170,10 @@
   <div class="screen" id="screen-write">
     <div class="card">
       <span class="badge-chip">화면 2 · 마무리 글쓰기</span>
-      <h2>1. 교회 측 논리와 루터의 논리, 너는 어느 쪽이 더 설득력 있다고 생각해?</h2>
-      <p class="sub">대화 내용 + 오늘 배운 내용을 근거로 써줘.</p>
-      <textarea id="q1Txt" placeholder="예: 나는 ___ 쪽이 더 설득력 있다고 생각해. 왜냐하면 ___"></textarea>
+
+      <h2>1-1. 기억나는 주장 하나</h2>
+      <p class="sub">오늘 대화에서 교회 측이 너를 설득하려고 썼던 말 중에, 제일 강하게 밀어붙였던 주장 하나만 떠올려서 짧게 적어줘.</p>
+      <textarea id="q1_1Txt" placeholder="예: 교회는 ___(이)라고 했어."></textarea>
 
       <button type="button" class="hint-toggle" id="hintToggle">💡 막막하면 힌트 보기</button>
       <div class="hint-box" id="hintBox">
@@ -167,8 +181,30 @@
         아니면 여전히 납득 안 되는 부분이 있어?
       </div>
 
-      <h2 style="margin-top:26px;">2. 이 논쟁은 왜 하나로 다시 합쳐지지 못하고, 갈라선 채 끝났을까?</h2>
-      <textarea id="q2Txt" placeholder="강의에서 들은 내용을 떠올려 써봐"></textarea>
+      <hr class="step-divider">
+
+      <h2>1-2. 지금 다시 보니</h2>
+      <p class="sub">그 주장, 지금 다시 생각해보니 이해가 가? 아니면 여전히 납득이 안 돼? 이유도 같이 적어줘.</p>
+      <textarea id="q1_2Txt" placeholder="예: 이해가 간다 / 안 된다. 왜냐하면 ___"></textarea>
+
+      <hr class="step-divider">
+
+      <h2>1-3. 최종 판단</h2>
+      <p class="sub">위에서 쓴 내용을 근거로, 교회 측 논리와 루터 논리 중 어느 쪽이 더 설득력 있는지 정리해줘.</p>
+      <textarea id="q1_3Txt" placeholder="예: 나는 ___ 쪽이 더 설득력 있다고 생각해. 왜냐하면 ___"></textarea>
+
+      <hr class="step-divider">
+
+      <h2>2. 이 논쟁이 계속 이렇게 남는다면?</h2>
+      <p class="sub">이 논쟁이 계속 이렇게 갈라진 채로 남는다면, 앞으로 유럽에서는 무슨 일이 벌어질 것 같아? 하나 골라봐.</p>
+      <div class="option-list" id="q2Options">
+        <label class="option-card"><input type="radio" name="q2choice" value="1"><span>① 결국 무력 충돌(전쟁)로 번질 것이다</span></label>
+        <label class="option-card"><input type="radio" name="q2choice" value="2"><span>② 시간이 지나면 자연스럽게 하나로 합쳐질 것이다</span></label>
+        <label class="option-card"><input type="radio" name="q2choice" value="3"><span>③ 각자 자기 지역에서 다른 종교를 믿으며 따로 살아갈 것이다</span></label>
+        <label class="option-card"><input type="radio" name="q2choice" value="4"><span>④ 왕이나 황제 같은 정치권력이 나서서 강제로 정리할 것이다</span></label>
+      </div>
+      <label style="margin-top:16px;">왜 그렇게 생각해?</label>
+      <textarea id="q2ReasonTxt" placeholder="한두 줄로 적어줘"></textarea>
 
       <button class="btn btn-primary" id="submitBtn" disabled>제출하기</button>
     </div>
@@ -246,15 +282,44 @@ document.getElementById("hintToggle").addEventListener("click", ()=>{
   document.getElementById("hintBox").classList.toggle("open");
 });
 
-/* ── 화면 2: 글쓰기 검증 ── */
-const q1Txt = document.getElementById("q1Txt");
-const q2Txt = document.getElementById("q2Txt");
+/* ── 화면 2: 글쓰기 검증 ──
+ * 문항1은 회상(1-1) → 재평가(1-2) → 최종판단(1-3) 3단계 스캐폴드로 분리.
+ * 문항2는 보기 4개 중 택1 + 이유 서술로 구성 — 정답은 없고, 어느 보기를 골라도
+ * 다음 차시(재정군사국가) 도입 발문으로 이어지도록 설계됨(2026-09-10 핸드오프). */
+const Q2_OPTIONS = [
+  { id: 1, symbol: "①", text: "결국 무력 충돌(전쟁)로 번질 것이다" },
+  { id: 2, symbol: "②", text: "시간이 지나면 자연스럽게 하나로 합쳐질 것이다" },
+  { id: 3, symbol: "③", text: "각자 자기 지역에서 다른 종교를 믿으며 따로 살아갈 것이다" },
+  { id: 4, symbol: "④", text: "왕이나 황제 같은 정치권력이 나서서 강제로 정리할 것이다" }
+];
+
+const q1_1Txt = document.getElementById("q1_1Txt");
+const q1_2Txt = document.getElementById("q1_2Txt");
+const q1_3Txt = document.getElementById("q1_3Txt");
+const q2ReasonTxt = document.getElementById("q2ReasonTxt");
+const q2OptionInputs = Array.from(document.querySelectorAll('input[name="q2choice"]'));
 const submitBtn = document.getElementById("submitBtn");
 
-function checkWrite(){
-  submitBtn.disabled = !(q1Txt.value.trim().length >= 10 && q2Txt.value.trim().length >= 10);
+function selectedQ2Option(){
+  const checked = q2OptionInputs.find(el => el.checked);
+  if (!checked) return null;
+  return Q2_OPTIONS.find(opt => opt.id === Number(checked.value)) || null;
 }
-[q1Txt, q2Txt].forEach(el=>el.addEventListener("input", checkWrite));
+
+function checkWrite(){
+  const filled =
+    q1_1Txt.value.trim().length >= 5 &&
+    q1_2Txt.value.trim().length >= 8 &&
+    q1_3Txt.value.trim().length >= 8 &&
+    !!selectedQ2Option() &&
+    q2ReasonTxt.value.trim().length >= 8;
+  submitBtn.disabled = !filled;
+}
+[q1_1Txt, q1_2Txt, q1_3Txt, q2ReasonTxt].forEach(el=>el.addEventListener("input", checkWrite));
+q2OptionInputs.forEach(el=>el.addEventListener("change", ()=>{
+  q2OptionInputs.forEach(o=> o.closest(".option-card").classList.toggle("selected", o.checked));
+  checkWrite();
+}));
 
 /* ── 제출 재시도 헬퍼 — history26 포털 fetchJsonRetry_() 관례(3회·700ms 간격)와 동일.
  * 순간적인 네트워크 문제로 fetch가 한 번 실패해도 시트 기록이 안 남는 사고를 막기 위함
@@ -287,21 +352,29 @@ submitBtn.addEventListener("click", async ()=>{
 
   const studentId = studentIdEl.value.trim();
   const studentName = studentNameEl.value.trim();
-  const q1 = q1Txt.value.trim();
-  const q2 = q2Txt.value.trim();
+  const q1_1 = q1_1Txt.value.trim();
+  const q1_2 = q1_2Txt.value.trim();
+  const q1_3 = q1_3Txt.value.trim();
+  const q2Option = selectedQ2Option();
+  const q2Reason = q2ReasonTxt.value.trim();
 
   const reflection =
-    `[교회 측 논리와 루터의 논리, 어느 쪽이 더 설득력 있는가]\n${q1}\n\n` +
-    `[왜 하나로 다시 합쳐지지 못했는가]\n${q2}`;
+    `[1-1. 기억나는 주장]\n${q1_1}\n\n` +
+    `[1-2. 지금 다시 보니]\n${q1_2}\n\n` +
+    `[1-3. 최종 판단]\n${q1_3}\n\n` +
+    `[2. 앞으로 벌어질 일 — ${q2Option.symbol} ${q2Option.text}]\n${q2Reason}`;
 
   const payload = {
     studentId: studentId,
     studentName: studentName,
     gameName: CONFIG.GAME_NAME,
-    choiceSummary: "",
+    choiceSummary: `문항2: ${q2Option.symbol}번 선택`,
     diffSummary: "",
     reflection: reflection,
-    choicesJson: JSON.stringify({ q1: q1, q2: q2 })
+    choicesJson: JSON.stringify({
+      q1_1: q1_1, q1_2: q1_2, q1_3: q1_3,
+      q2_choice: q2Option.id, q2_choice_text: q2Option.text, q2_reason: q2Reason
+    })
   };
 
   if (!PREVIEW) {
@@ -324,8 +397,10 @@ submitBtn.addEventListener("click", async ()=>{
   }
 
   const padletText =
-    `[1. 교회 측 논리와 루터의 논리, 어느 쪽이 더 설득력 있는가]\n${q1}\n\n` +
-    `[2. 이 논쟁은 왜 하나로 다시 합쳐지지 못했는가]\n${q2}`;
+    `[1-1. 기억나는 주장]\n${q1_1}\n\n` +
+    `[1-2. 지금 다시 보니]\n${q1_2}\n\n` +
+    `[1-3. 최종 판단]\n${q1_3}\n\n` +
+    `[2. 앞으로 벌어질 일] ${q2Option.symbol} ${q2Option.text}\n${q2Reason}`;
   document.getElementById("padletText").value = padletText;
   document.getElementById("padletStatus").textContent = "";
 
